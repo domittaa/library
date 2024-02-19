@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=dev-user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=dev_db
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data:cached
+
+  test-postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=test-user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=test_db
+    ports:
+      - "5434:5432"
+    expose:
+      - "5434"
+    volumes:
+      - test-db-data:/var/lib/postgresql/data:cached
+
+  api:
+    build: .
+    command: bash -c "uvicorn source_code.app:app --host 0.0.0.0 --reload"
+    volumes:
+      - .:/code
+    environment:
+      PYTHONPATH: .
+      DATABASE_URL: "postgresql+asyncpg://dev-user:password@postgres:5432/dev_db"
+    ports:
+      - "8008:8000"
+    depends_on:
+      - postgres
+
+volumes:
+  db-data:
+  test-db-data:

@@ -184,6 +184,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.idea/
 
 # mkdocs documentation
 /site
