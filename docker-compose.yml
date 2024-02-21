@@ -29,7 +29,7 @@ services:
 
   api:
     build: .
-    command: bash -c "uvicorn source_code.app:app --host 0.0.0.0 --reload"
+    command: bash -c "alembic upgrade head && uvicorn source_code.app:app --host 0.0.0.0 --reload"
     volumes:
       - .:/code
     environment:

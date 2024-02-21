@@ -1,12 +1,13 @@
-from sqlalchemy import Column, String, Integer, Boolean, ForeignKey, Date, DateTime
-from source_code.database import Base
+from sqlalchemy import Boolean, Column, Date, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
+
+from source_code.database import Base
 
 
 class BookAuthor(Base):
     __tablename__ = "book_author"
-    book_id = Column(Integer, ForeignKey('books.id'), primary_key=True)
-    author_id = Column(Integer, ForeignKey('authors.id'), primary_key=True)
+    book_id = Column(Integer, ForeignKey("books.id"), primary_key=True)
+    author_id = Column(Integer, ForeignKey("authors.id"), primary_key=True)
 
 
 class Book(Base):

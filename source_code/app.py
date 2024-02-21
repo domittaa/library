@@ -2,9 +2,10 @@ import logging
 import sys
 from contextlib import asynccontextmanager
 
+from fastapi import FastAPI
+
 from source_code.config import settings
 from source_code.database import sessionmanager
-from fastapi import FastAPI
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG if settings.debug_logs else logging.INFO)
 
@@ -28,5 +29,3 @@ app = FastAPI(lifespan=lifespan, title=settings.project_name, docs_url="/api/doc
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
-
-
