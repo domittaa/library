@@ -9,13 +9,14 @@ from fastapi import FastAPI
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG if settings.debug_logs else logging.INFO)
 
 
-@asynccontextmanager
+@asynccontextmanager  # converts function into async context manager
 async def lifespan(app: FastAPI):
     """
     Function that handles startup and shutdown events.
-    To understand more, read https://fastapi.tiangolo.com/advanced/events/
     """
+    # before yield define what will be executed before app starts
     yield
+    # after yield define what will be executed after app has finished
     if sessionmanager._engine is not None:
         # Close the DB connection
         await sessionmanager.close()
