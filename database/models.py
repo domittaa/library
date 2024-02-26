@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, Date, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
-from source_code.database import Base
+from database.database import Base
 
 
 class BookAuthor(Base):
