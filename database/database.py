@@ -57,3 +57,9 @@ sessionmanager = DatabaseSessionManager(settings.database_url, {"echo": settings
 async def get_db_session():
     async with sessionmanager.session() as session:
         yield session
+
+
+async def create_tables():
+    async with sessionmanager._engine.begin() as conn:
+        # This will create all tables
+        await conn.run_sync(Base.metadata.create_all)

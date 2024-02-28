@@ -21,7 +21,7 @@ class Book(Base):
 
     category = relationship("Category", back_populates="books")
     publisher = relationship("Publisher", back_populates="books")
-    authors = relationship("Author", secondary=BookAuthor, back_populates="books")
+    authors = relationship("Author", secondary="book_author", back_populates="books")
 
 
 class Author(Base):
@@ -30,7 +30,7 @@ class Author(Base):
     first_name = Column(String, nullable=False)
     last_name = Column(String)
 
-    books = relationship("Book", secondary=BookAuthor, back_populates="authors")
+    books = relationship("Book", secondary="book_author", back_populates="authors")
 
 
 class Category(Base):
@@ -59,7 +59,7 @@ class User(Base):
     address = Column(String)
     date_joined = Column(Date)
 
-    orders = relationship("Order", back_populates="user")
+    # orders = relationship("Order", back_populates="user")
 
 
 # class Order(Base):

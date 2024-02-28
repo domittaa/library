@@ -12,3 +12,8 @@
 
 # Check for updates and automatically upgrade pre-commit configuration file 
 `pre-commit autoupdate`
+
+
+# Adresses
+PGADMIN: localhost:5050
+API DOCS: localhost:8008/api/docs
