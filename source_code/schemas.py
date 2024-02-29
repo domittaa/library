@@ -6,7 +6,6 @@ from pydantic import BaseModel
 
 class BookBase(BaseModel):
 
-    id: int
     title: str
     year: int
     is_loaned: bool
