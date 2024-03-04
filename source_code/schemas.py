@@ -18,7 +18,6 @@ class BookBase(BaseModel):
 
 class AuthorBase(BaseModel):
 
-    id: int
     first_name: str
     last_name: str
 
@@ -34,25 +33,22 @@ class AuthorSchema(AuthorBase):
     books: List[BookBase]
 
 
-class Category(BaseModel):
+class CategorySchema(BaseModel):
 
-    id: int
     name: str
 
     class Config:
         orm_mode = True
 
 
-class Publisher(BaseModel):
-    id: int
+class PublisherSchema(BaseModel):
     name: str
 
     class Config:
         orm_mode = True
 
 
-class User(BaseModel):
-    id: int
+class UserSchema(BaseModel):
     first_name: str
     last_name: str
     email: str
@@ -64,8 +60,7 @@ class User(BaseModel):
         orm_mode = True
 
 
-class Notification(BaseModel):
-    id: int
+class NotificationSchema(BaseModel):
     text: str
     sent_at: datetime
 
