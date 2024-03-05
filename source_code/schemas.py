@@ -66,3 +66,14 @@ class NotificationSchema(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class OrderSchema(BaseModel):
+    date: date
+    due_date: date
+    extension: bool
+    is_returned: bool
+    user_id: int
+
+    class Config:
+        orm_mode = True

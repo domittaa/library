@@ -31,35 +31,3 @@ async def add_book(book: BookBase, db: AsyncSession = Depends(get_db_session)):
     await db.commit()
     await db.refresh(book)
     return book
-
-
-@router.post("/publisher")
-async def add_publisher(publisher: PublisherSchema, db: AsyncSession = Depends(get_db_session)):
-    publisher = Publisher(name=publisher.name)
-    db.add(publisher)
-    await db.commit()
-    await db.refresh(publisher)
-    return publisher
-
-
-@router.get("/publishers")
-async def get_all_publishers(db: AsyncSession = Depends(get_db_session)):
-    result = await db.execute(select(Publisher))
-    publishers = result.scalars().all()
-    return {"publisher": publishers}
-
-
-@router.post("/category")
-async def add_category(category: CategorySchema, db: AsyncSession = Depends(get_db_session)):
-    category = Category(name=category.name)
-    db.add(category)
-    await db.commit()
-    await db.refresh(category)
-    return category
-
-
-@router.get("/categories")
-async def get_all_categories(db: AsyncSession = Depends(get_db_session)):
-    result = await db.execute(select(Category))
-    categories = result.scalars().all()
-    return {"category": categories}
