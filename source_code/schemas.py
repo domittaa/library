@@ -8,7 +8,7 @@ class BookBase(BaseModel):
 
     title: str
     year: int
-    is_loaned: bool
+    is_loaned: bool = False
     category_id: int
     publisher_id: int
 
@@ -71,9 +71,10 @@ class NotificationSchema(BaseModel):
 class OrderSchema(BaseModel):
     date: date
     due_date: date
-    extension: bool
-    is_returned: bool
+    extension: bool = False
+    is_returned: bool = False
     user_id: int
+    books: List[BookBase]
 
     class Config:
         orm_mode = True

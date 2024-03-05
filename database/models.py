@@ -86,7 +86,7 @@ class Order(Base):
     notification = relationship("Notification", back_populates="order")
 
 
-class Notification(Base):
+class Notification(Base):  # not sure if store in db
     __tablename__ = "notification"
     id = Column(Integer, primary_key=True, autoincrement=True)
     text = Column(String, nullable=False)
