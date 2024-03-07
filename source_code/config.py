@@ -5,7 +5,7 @@ class Settings(BaseSettings):  # determine values that aren't passed as keyword 
     database_url: str
     echo_sql: bool = True
     test: bool = False
-    project_name: str = "Projekt Biblioteka"
+    project_name: str = "Library"
     debug_logs: bool = False
 
 

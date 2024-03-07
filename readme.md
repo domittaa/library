@@ -16,4 +16,7 @@
 
 # Adresses
 PGADMIN: localhost:5050
+
 API DOCS: localhost:8008/api/docs
+
+RABBIT MQ: localhost:15672

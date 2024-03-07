@@ -16,6 +16,15 @@ async def get_all_orders(db: AsyncSession = Depends(get_db_session)):
     return {"orders": orders}
 
 
+@router.get("/order/{order_id}")
+async def get_order(order_id: int, db: AsyncSession = Depends(get_db_session)):
+    result = await db.execute(select(Order).where(Order.id == order_id))
+    order = result.scalars().first()
+    if not order:
+        raise HTTPException(status_code=404, detail=f"Order with id {order_id} does not exists")
+    return order
+
+
 @router.post("/order")
 async def create_order(order: OrderSchema, db: AsyncSession = Depends(get_db_session)):
     order = Order(user=order.user_id, date=order.date, due_date=order.due_date)
