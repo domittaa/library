@@ -13,7 +13,7 @@ class BookBase(BaseModel):
     publisher_id: int
 
     class Config:
-        orm_mode = True
+        orm_mode = True  # read the data even if it is not a dict, but an ORM model
 
 
 class AuthorBase(BaseModel):
@@ -26,7 +26,7 @@ class AuthorBase(BaseModel):
 
 
 class BookSchema(BookBase):
-    authors: List[AuthorBase]
+    authors: list[int]
 
 
 class AuthorSchema(AuthorBase):
