@@ -29,8 +29,16 @@ class BookSchema(BookBase):
     authors: list[int]
 
 
+class BookGetSchema(BookSchema):
+    id: int
+
+
 class AuthorSchema(AuthorBase):
     books: List[BookBase]
+
+
+class AuthorGetSchema(AuthorSchema):
+    id: int
 
 
 class CategorySchema(BaseModel):
@@ -74,7 +82,7 @@ class OrderSchema(BaseModel):
     extension: bool = False
     is_returned: bool = False
     user_id: int
-    books: List[BookBase]
+    books: List[int]
 
     class Config:
         orm_mode = True

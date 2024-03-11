@@ -9,7 +9,7 @@ from source_code.schemas import PublisherSchema
 router = APIRouter()
 
 
-@router.post("/publisher")
+@router.post("/")
 async def add_publisher(publisher: PublisherSchema, db: AsyncSession = Depends(get_db_session)):
     publisher = Publisher(name=publisher.name)
     db.add(publisher)
@@ -18,7 +18,7 @@ async def add_publisher(publisher: PublisherSchema, db: AsyncSession = Depends(g
     return publisher
 
 
-@router.get("/publishers")
+@router.get("/")
 async def get_all_publishers(db: AsyncSession = Depends(get_db_session)):
     result = await db.execute(select(Publisher))
     publishers = result.scalars().all()

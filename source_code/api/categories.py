@@ -9,7 +9,7 @@ from source_code.schemas import CategorySchema
 router = APIRouter()
 
 
-@router.post("/category")
+@router.post("/")
 async def add_category(category: CategorySchema, db: AsyncSession = Depends(get_db_session)):
     category = Category(name=category.name)
     db.add(category)
@@ -18,7 +18,7 @@ async def add_category(category: CategorySchema, db: AsyncSession = Depends(get_
     return category
 
 
-@router.get("/categories")
+@router.get("/")
 async def get_all_categories(db: AsyncSession = Depends(get_db_session)):
     result = await db.execute(select(Category))
     categories = result.scalars().all()

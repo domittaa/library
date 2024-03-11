@@ -9,14 +9,14 @@ from source_code.schemas import OrderSchema
 router = APIRouter()
 
 
-@router.get("/orders")
+@router.get("/")
 async def get_all_orders(db: AsyncSession = Depends(get_db_session)):
     result = await db.execute(select(Order))
     orders = result.scalars().all()
     return {"orders": orders}
 
 
-@router.get("/order/{order_id}")
+@router.get("/{order_id}")
 async def get_order(order_id: int, db: AsyncSession = Depends(get_db_session)):
     result = await db.execute(select(Order).where(Order.id == order_id))
     order = result.scalars().first()
@@ -25,7 +25,7 @@ async def get_order(order_id: int, db: AsyncSession = Depends(get_db_session)):
     return order
 
 
-@router.post("/order")
+@router.post("/")
 async def create_order(order: OrderSchema, db: AsyncSession = Depends(get_db_session)):
     order = Order(user=order.user_id, date=order.date, due_date=order.due_date)
     await db.commit()
