@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "projektbiblioteka"
+name = "library"
 version = "0.1.0"
 description = ""
 authors = ["domittaa <klodzinska.d@gmail.com>"]
