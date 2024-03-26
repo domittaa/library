@@ -26,6 +26,7 @@ async def send(message):
             routing_key="test",
         )
 
+
 if __name__ == "__main__":
     while True:
         message = "Hello World!"
