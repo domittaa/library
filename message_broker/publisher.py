@@ -6,7 +6,7 @@ from aio_pika import DeliveryMode, ExchangeType
 
 async def send(message):
     connection = await aio_pika.connect_robust(
-        "amqp://guest:guest@127.0.0.1:5672/",
+        "amqp://guest:guest@rabbitmq:5672/",
     )
 
     async with connection:
@@ -25,9 +25,3 @@ async def send(message):
             aio_pika.Message(body=message.encode(), delivery_mode=DeliveryMode.PERSISTENT),
             routing_key="test",
         )
-
-
-if __name__ == "__main__":
-    while True:
-        message = "Hello World!"
-        asyncio.run(send(message))

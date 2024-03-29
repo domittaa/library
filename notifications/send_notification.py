@@ -1,15 +1,34 @@
 import os
 import smtplib
-import ssl
+from email.message import EmailMessage
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def send_email(receiver_email, message):
-    sender_email = "mentoringprojektbiblioteka@gmail.com"
-    port = 465
     password = os.getenv("MAIL_PASSWORD")
+    email = os.getenv("MAIL_ADDRESS")
 
-    context = ssl.create_default_context()
+    msg = EmailMessage()
+    msg["Subject"] = "Order expiration notification"
+    msg["From"] = email
+    msg["To"] = receiver_email
+    msg.set_content(message)
 
-    with smtplib.SMTP_SSL("smpt.gmail.com", port, context=context) as server:
-        server.login(sender_email, password)
-        server.sendmail(sender_email, receiver_email, message)
+    smpt_server = "smtp.gmail.com"
+    smpt_port = 587
+
+    try:
+        with smtplib.SMTP(smpt_server, smpt_port) as server:
+            server.starttls()
+            server.login(email, password)
+            server.send_message(msg)
+        print("Email sent!")
+    except Exception as e:
+        print(f"Failed to send email. Error: {e}")
+
+
+if __name__ == "__main__":
+    send_email("test@gmail.com", "This is a test")

@@ -61,11 +61,8 @@ services:
     volumes:
       - "rabbitmq_data:/var/lib/rabbitmq"
 
+
 volumes:
   db-data:
   test-db-data:
   rabbitmq_data:
-
-networks:
-  app_network:
-    driver: bridge

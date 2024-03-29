@@ -8,13 +8,13 @@ from aio_pika.abc import AbstractIncomingMessage
 
 async def on_message(message: AbstractIncomingMessage):
     async with message.process():
-        print(f"Message {message} received")
+        return message
 
 
 async def main(event_loop) -> None:
     logging.basicConfig(level=logging.DEBUG)
 
-    connection_string = await aio_pika.connect_robust("amqp://guest:guest@127.0.0.1:5672/", loop=event_loop)
+    connection_string = await aio_pika.connect_robust("amqp://guest:guest@1rabbitmq:5672/", loop=event_loop)
 
     channel = await connection_string.channel()
 
