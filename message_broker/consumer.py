@@ -1,20 +1,22 @@
-import asyncio
 import logging
 
 import aio_pika
 from aio_pika import ExchangeType
 from aio_pika.abc import AbstractIncomingMessage
 
+from notifications.send_notification import send_email
+
 
 async def on_message(message: AbstractIncomingMessage):
     async with message.process():
+        send_email(message.body.decode())
         return message
 
 
-async def main(event_loop) -> None:
+async def start_consumer(event_loop) -> None:
     logging.basicConfig(level=logging.DEBUG)
 
-    connection_string = await aio_pika.connect_robust("amqp://guest:guest@1rabbitmq:5672/", loop=event_loop)
+    connection_string = await aio_pika.connect_robust("amqp://guest:guest@rabbitmq:5672/", loop=event_loop)
 
     channel = await connection_string.channel()
 
@@ -29,10 +31,3 @@ async def main(event_loop) -> None:
     await queue.bind(exchange)
     await second_queue.bind(exchange)
     await queue.consume(on_message, timeout=60)
-
-
-if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    connection = loop.run_until_complete(main(loop))
-
-    loop.run_forever()

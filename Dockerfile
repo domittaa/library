@@ -15,13 +15,12 @@ RUN poetry config virtualenvs.create false \
 
 
 COPY ./source_code /code/source_code
+COPY ./scheduler /code/scheduler
 
-RUN echo "45 23 * * * cd /code && python source_code/scheduler.py >> /var/log/cron.log 2>&1" | crontab
+RUN echo "45 6 * * * cd /code && python /code/scheduler/scheduler.py >> /var/log/cron.log 2>&1" | crontab
 RUN touch /var/log/cron.log
 
 RUN echo "#!/bin/bash\n\
 cron\n\
 uvicorn source_code.app:app --host 0.0.0.0 --reload" > /code/entrypoint.sh \
 && chmod +x /code/entrypoint.sh
-
-CMD ["/code/entrypoint.sh"]

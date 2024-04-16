@@ -1,5 +1,3 @@
-import asyncio
-
 import aio_pika
 from aio_pika import DeliveryMode, ExchangeType
 

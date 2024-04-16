@@ -7,7 +7,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def send_email(receiver_email, message):
+def send_email(message, receiver_email="test@gmail.com"):
+    print(f"Sending email with message: {message}")
     password = os.getenv("MAIL_PASSWORD")
     email = os.getenv("MAIL_ADDRESS")
 
