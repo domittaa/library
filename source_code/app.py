@@ -7,7 +7,7 @@ from fastapi import FastAPI
 
 from database.database import create_tables, sessionmanager
 from message_broker.consumer import start_consumer
-from source_code.api import authors, books, categories, orders, publishers, queue
+from source_code.api import authors, books, categories, orders, publishers, users
 from source_code.config import settings
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG if settings.debug_logs else logging.INFO)
@@ -44,4 +44,4 @@ app.include_router(orders.router, prefix="/orders")
 app.include_router(categories.router, prefix="/categories")
 app.include_router(publishers.router, prefix="/publishers")
 app.include_router(authors.router, prefix="/authors")
-app.include_router(queue.router, prefix="/queue")
+app.include_router(users.router, prefix="/users")

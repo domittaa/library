@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.database import get_db_session
@@ -15,3 +16,10 @@ async def add_author(author: AuthorBase, db: AsyncSession = Depends(get_db_sessi
     await db.commit()
     await db.refresh(author)
     return author
+
+
+@router.get("/")
+async def get_all_authors(db: AsyncSession = Depends(get_db_session)):
+    result = await db.execute(select(Author))
+    authors = result.scalars().all()
+    return {"authors": authors}
