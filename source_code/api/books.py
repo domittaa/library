@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.database import get_db_session
-from database.models import Book
+from database.models import Author, Book
 from source_code.schemas import BookGetSchema, BookSchema
 
 router = APIRouter()
@@ -26,15 +26,27 @@ async def get_all_books(db: AsyncSession = Depends(get_db_session)):
 
 
 @router.post("/")
-async def add_book(book: BookSchema, db: AsyncSession = Depends(get_db_session)) -> BookGetSchema:
-    book = Book(
+async def add_book(book: BookSchema, db: AsyncSession = Depends(get_db_session)) -> BookSchema:
+    new_book = Book(
         title=book.title,
         year=book.year,
         is_loaned=book.is_loaned,
         category_id=book.category_id,
         publisher_id=book.publisher_id,
     )
-    db.add(book)
+    if book.authors:
+        author_query = select(Author).where(Author.id.in_(book.authors))
+        result = await db.execute(author_query)
+        authors = result.scalars().all()
+
+        if len(authors) != len(book.authors):
+            found_ids = {author.id for author in authors}
+            missing_ids = set(book.authors) - found_ids
+            raise HTTPException(status_code=404, detail=f"Authors with IDs {missing_ids} not found")
+
+        new_book.authors = [author.id for author in authors]
+
+    db.add(new_book)
     await db.commit()
-    await db.refresh(book)
-    return book
+    await db.refresh(new_book)
+    return new_book
