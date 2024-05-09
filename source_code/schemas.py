@@ -4,6 +4,14 @@ from typing import List
 from pydantic import BaseModel
 
 
+class AuthorBase(BaseModel):
+    first_name: str
+    last_name: str
+
+    class Config:
+        orm_mode = True
+
+
 class BookBase(BaseModel):
 
     title: str
@@ -16,29 +24,17 @@ class BookBase(BaseModel):
         orm_mode = True  # read the data even if it is not a dict, but an ORM model
 
 
-class AuthorBase(BaseModel):
-
-    first_name: str
-    last_name: str
-
-    class Config:
-        orm_mode = True
-
-
 class BookSchema(BookBase):
-    authors: list[int]
-
-
-class BookGetSchema(BookSchema):
     id: int
+    authors: list[AuthorBase]
+
+
+class CreateBookSchema(BookBase):
+    authors: list[int]
 
 
 class AuthorSchema(AuthorBase):
     books: List[BookBase]
-
-
-class AuthorGetSchema(AuthorSchema):
-    id: int
 
 
 class CategorySchema(BaseModel):

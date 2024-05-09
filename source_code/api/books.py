@@ -1,32 +1,33 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
 from database.database import get_db_session
 from database.models import Author, Book
-from source_code.schemas import BookGetSchema, BookSchema
+from source_code.schemas import BookSchema, CreateBookSchema
 
 router = APIRouter()
 
 
-@router.get("/{book_id}")
-async def get_book(book_id: int, db: AsyncSession = Depends(get_db_session)) -> BookGetSchema:
-    result = await db.execute(select(Book).where(Book.id == book_id))
-    book = result.scalars().first()
+@router.get("/{book_id}", response_model=BookSchema)
+async def get_book(book_id: int, db: AsyncSession = Depends(get_db_session)):
+    result = await db.execute(select(Book).options(joinedload(Book.authors)).where(Book.id == book_id))
+    book = result.unique().scalars().first()
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
     return book
 
 
-@router.get("/")
+@router.get("/", response_model=list[BookSchema])
 async def get_all_books(db: AsyncSession = Depends(get_db_session)):
-    result = await db.execute(select(Book))
-    books = result.scalars().all()
-    return {"books": books}
+    result = await db.execute(select(Book).options(joinedload(Book.authors)))
+    books = result.unique().scalars().all()
+    return books
 
 
-@router.post("/")
-async def add_book(book: BookSchema, db: AsyncSession = Depends(get_db_session)) -> BookSchema:
+@router.post("/", response_model=BookSchema)
+async def add_book(book: CreateBookSchema, db: AsyncSession = Depends(get_db_session)):
     new_book = Book(
         title=book.title,
         year=book.year,
@@ -44,9 +45,11 @@ async def add_book(book: BookSchema, db: AsyncSession = Depends(get_db_session))
             missing_ids = set(book.authors) - found_ids
             raise HTTPException(status_code=404, detail=f"Authors with IDs {missing_ids} not found")
 
-        new_book.authors = [author.id for author in authors]
+        new_book.authors = authors
 
     db.add(new_book)
     await db.commit()
     await db.refresh(new_book)
-    return new_book
+    book_with_author = await db.execute(select(Book).options(joinedload(Book.authors)).where(Book.id == new_book.id))
+    result = book_with_author.unique().scalars().first()
+    return result

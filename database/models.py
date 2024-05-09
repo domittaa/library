@@ -30,8 +30,8 @@ class Book(Base):
 
     category = relationship("Category", back_populates="book")
     publisher = relationship("Publisher", back_populates="book")
-    author = relationship("Author", secondary=book_author, back_populates="book")
-    order = relationship("Order", secondary=order_book_association, back_populates="book")
+    authors = relationship("Author", secondary=book_author, back_populates="books")
+    orders = relationship("Order", secondary=order_book_association, back_populates="books")
 
 
 class Author(Base):
@@ -40,7 +40,7 @@ class Author(Base):
     first_name = Column(String, nullable=False)
     last_name = Column(String)
 
-    book = relationship("Book", secondary=book_author, back_populates="author")
+    books = relationship("Book", secondary=book_author, back_populates="authors")
 
 
 class Category(Base):
@@ -82,7 +82,7 @@ class Order(Base):
     user_id = Column(Integer, ForeignKey("user.id"), nullable=False)
 
     user = relationship("User", back_populates="order")
-    book = relationship("Book", secondary=order_book_association, back_populates="order")
+    books = relationship("Book", secondary=order_book_association, back_populates="orders")
     notification = relationship("Notification", back_populates="order")
 
 
