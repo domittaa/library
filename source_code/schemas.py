@@ -52,7 +52,7 @@ class PublisherSchema(BaseModel):
         orm_mode = True
 
 
-class UserSchema(BaseModel):
+class CreateUserSchema(BaseModel):
     first_name: str
     last_name: str
     email: str
@@ -64,6 +64,10 @@ class UserSchema(BaseModel):
         orm_mode = True
 
 
+class UserSchema(CreateUserSchema):
+    id: int
+
+
 class NotificationSchema(BaseModel):
     text: str
     sent_at: datetime
@@ -72,7 +76,7 @@ class NotificationSchema(BaseModel):
         orm_mode = True
 
 
-class OrderSchema(BaseModel):
+class CreateOrderSchema(BaseModel):
     date: date
     due_date: date
     extension: bool = False
@@ -82,3 +86,8 @@ class OrderSchema(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class OrderSchema(CreateOrderSchema):
+    id: int
+    books: List[BookSchema]

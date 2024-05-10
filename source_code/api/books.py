@@ -21,7 +21,7 @@ async def get_book(book_id: int, db: AsyncSession = Depends(get_db_session)):
 
 @router.get("/", response_model=list[BookSchema])
 async def get_all_books(db: AsyncSession = Depends(get_db_session)):
-    result = await db.execute(select(Book).options(joinedload(Book.authors)))
+    result = await db.execute(select(Book).options(joinedload(Book.authors)).order_by(Book.id))
     books = result.unique().scalars().all()
     return books
 
